@@ -1,17 +1,28 @@
 ---
 title: "Class Project"
 author: "Elizabeth Shaw"
+date: "November 10, 2024"
 output: html_notebook
 ---
 ### Guiding Question (i.e., Research Question):
-Make a clear statement of a single guiding/research question that will drive your analysis. It should be phrased as a question that you will try to investigate (i.e., it should have a question mark). 
+Are the dog breeds with longer lifespans more popular than dog breeds with shorter lifespans?
 
 ### Become acquainted with your data sources: 
-Where did you find them? 
-Who collected/maintains them? 
-When and why were they originally collected? 
-What does a case represent in each data source, and how many total cases are available? 
-What are some of the variables that you plan to use? 
+
+### Where did you find them? 
+I found the data on the websites for the American Kennel Club (AKC) and Spot Pet Insurance.
+
+### Who collected/maintains them? 
+The primary data source is collected from data on the AKC website and maintained in github by "tmfilho". The data on Spot's website is sourced from the AKC and Reader's Digest.
+
+### When and why were they originally collected? 
+The primary data source was collected to show information on 277 dog breeds including their lifespan and different traits. The data on most popular breeds from the AKC website was last updated in 2020 to show the most popular breeds by year. The data from Spot was last updated on 9/16/24 to show the most popular breed in each state.
+
+### What does a case represent in each data source, and how many total cases are available? 
+The primary source (AKC_Data) has 277 cases of individual dog breeds. I have two secondary sources. The first (PopularBreeds) has 192 cases. Each case is the ranking of and individual dog breed from 2014 to 2018. The second (StateBreeds) has 50 cases. Each case is the first and second most popular dog breed in an individual state in the US.
+
+### What are some of the variables that you plan to use? 
+From the primary source I will use variables for dog breed, life expectancy, and weight. From the secondary sources I will use breed, state, year, and popularity.
 
 ```{r}
 rm(list = ls())

@@ -78,3 +78,50 @@ StateBreeds <- StateBreeds%>%
 StateBreeds  
 ```
 
+### Explore intuition related to the research question:
+
+### Create some informative plots and summary statistics.
+
+```{r}
+Lifespan <- AKC_Data%>%
+  select(Breed, min_expectancy, max_expectancy, min_weight, max_weight)%>%
+  mutate(AVG_Lifespan = (min_expectancy + max_expectancy)/2)%>%
+  mutate(AVG_Weight = (min_weight + max_weight)/2)%>%
+  arrange(Breed)
+
+Lifespan
+```
+
+```{r}
+Lifespan%>%
+  ggplot(aes(x=AVG_Weight, y=AVG_Lifespan))+
+  geom_point()+
+  theme_bw()
+```
+
+
+```{r}
+PopularBreeds <- PopularBreeds%>%
+  mutate(`2018 Rank` = as.numeric(`2018 Rank`))%>%
+  mutate(`2017 Rank` = as.numeric(`2017 Rank`))%>%
+  mutate(`2016 Rank` = as.numeric(`2016 Rank`))%>%
+  mutate(`2015 Rank` = as.numeric(`2015 Rank`))%>%
+  mutate(`2014 Rank` = as.numeric(`2014 Rank`))
+```
+
+
+
+
+```{r}
+Avg_Pop <- PopularBreeds%>%
+  mutate(AVG_Rank = rowMeans(cbind(`2018 Rank`, `2017 Rank`, `2016 Rank`, `2015 Rank`, `2014 Rank`), na.rm = TRUE))%>%
+  arrange(AVG_Rank)
+
+Avg_Pop
+```
+
+### Describe preliminary observations and intuition about the research question.
+
+From the wrangling I have completed with the data sets so far I can see that smaller breeds tend to live longer, but the three most popular dog breeds are large dogs. From this preliminary information it would seem that breeds that live longer are not more popular with pet owners than breeds with shorter lifespans. Further work with these data sets and looking at the bigger picture of all the data may show a different picture when looking at all data together.
+
+

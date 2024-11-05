@@ -100,7 +100,7 @@ Lifespan%>%
 ```
 
 
-```{r}
+```{r warning=FALSE}
 PopularBreeds <- PopularBreeds%>%
   mutate(`2018 Rank` = as.numeric(`2018 Rank`))%>%
   mutate(`2017 Rank` = as.numeric(`2017 Rank`))%>%
@@ -109,7 +109,7 @@ PopularBreeds <- PopularBreeds%>%
   mutate(`2014 Rank` = as.numeric(`2014 Rank`))
 ```
 
-
+### After ensuring columns are changed from character strings to numeric, I can then find the average popularity of each dog breed
 
 
 ```{r}

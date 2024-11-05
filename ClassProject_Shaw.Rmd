@@ -1,0 +1,69 @@
+---
+title: "Class Project"
+author: "Elizabeth Shaw"
+output: html_notebook
+---
+### Guiding Question (i.e., Research Question):
+Make a clear statement of a single guiding/research question that will drive your analysis. It should be phrased as a question that you will try to investigate (i.e., it should have a question mark). 
+
+### Become acquainted with your data sources: 
+Where did you find them? 
+Who collected/maintains them? 
+When and why were they originally collected? 
+What does a case represent in each data source, and how many total cases are available? 
+What are some of the variables that you plan to use? 
+
+```{r}
+rm(list = ls())
+library(rvest)
+library(dplyr)
+library(lubridate)
+library(readr)
+library(tidyverse)
+library(readr)
+```
+
+
+```{r}
+AKC_Data<- read_csv("akc-data-2020-05-17 17_35_49.397041.csv")
+
+AKC_Data <- AKC_Data%>%
+select(...1, temperament, popularity, min_height, max_height, min_weight, max_weight, min_expectancy, max_expectancy, group, grooming_frequency_value, grooming_frequency_category, shedding_value, shedding_category, energy_level_value, energy_level_category, trainability_value, trainability_category, demeanor_value, demeanor_category)%>%
+rename("Breed" = ...1)
+
+str(AKC_Data)
+head(AKC_Data)
+```
+
+```{r}
+page <- "https://www.akc.org/expert-advice/news/most-popular-dog-breeds-full-ranking-list/"
+BreedPop <- page %>%
+  read_html() %>%
+  html_nodes(css = "table") %>%
+  html_table(fill = TRUE)
+
+PopularBreeds <- BreedPop[[1]]
+str(PopularBreeds)
+head(PopularBreeds)
+```
+
+```{r}
+pagetwo <- "https://spotpet.com/blog/breed-tips/most-popular-dog-breeds-by-state"
+ByState <- pagetwo %>%
+  read_html() %>%
+  html_nodes(css = "table") %>%
+  html_table(fill = TRUE)
+
+StateBreeds <- ByState[[1]]
+str(StateBreeds)
+head(StateBreeds)
+```
+
+```{r}
+StateBreeds <- StateBreeds%>%
+  filter(row_number() >1)%>%
+  rename("State" = X1, "1st Most Popular" = X2, "2nd Most Popular" = X3)
+
+StateBreeds  
+```
+

@@ -1,6 +1,6 @@
 ---
 title: "Class Project"
-author: "Elizabeth Shaw"
+author: "Mystery"
 date: "November 10, 2024"
 output: html_notebook
 ---
@@ -36,7 +36,7 @@ library(readr)
 
 
 ```{r}
-AKC_Data<- read_csv("akc-data-2020-05-17 17_35_49.397041.csv")
+AKC_Data<- read_csv("akc-data-2020-05-17 17_35_49.397041.csv") ###downloaded from https://tmfilho.github.io/akcdata/
 
 AKC_Data <- AKC_Data%>%
 select(...1, temperament, popularity, min_height, max_height, min_weight, max_weight, min_expectancy, max_expectancy, group, grooming_frequency_value, grooming_frequency_category, shedding_value, shedding_category, energy_level_value, energy_level_category, trainability_value, trainability_category, demeanor_value, demeanor_category)%>%
@@ -143,9 +143,16 @@ Avg_Pop
 ```
 
 ```{r}
+AvgLifespan <-
+  Lifespan%>%
+  select(Breed, AVG_Lifespan)
+
 Avg_Life_Rank <-
   Avg_Pop%>%
-  inner_join(AvgLifespan, by = c(Breed = "Breed"))%>%
+  inner_join(AvgLifespan, by = c(Breed = "Breed"))
+
+Avg_Life_Rank <-
+  Avg_Life_Rank%>%
   select(Breed, AVG_Rank, AVG_Lifespan)
 
 Avg_Life_Rank

@@ -122,6 +122,65 @@ Avg_Pop
 
 ### Describe preliminary observations and intuition about the research question.
 
-From the wrangling I have completed with the data sets so far I can see that smaller breeds tend to live longer, but the three most popular dog breeds are large dogs. From this preliminary information it would seem that breeds that live longer are not more popular with pet owners than breeds with shorter lifespans. Further work with these data sets and looking at the bigger picture of all the data may show a different picture when looking at all data together.
+From the wrangling I have completed with the data sets so far I can see that smaller breeds tend to live longer, but the three most popular dog breeds are large dogs. From this preliminary information it would seem that breeds that live longer are not more popular with pet owners than breeds with shorter lifespans. Further work with these data sets and looking at the bigger picture of all the data may show something different.
+
+### I want to include a new column to list the average lifespan of the breed alongside the popularity for the given years. Putting the Avg_Pop table in alphabetical order makes it easier to check the two tables for compatablity. I can then see that the breed names in the Avg_Pop table are plural, while they are singular in the Lifespan table. To join them I will first have to clean up the breed names so they match properly
+
+```{r}
+Avg_Pop_Alpha <-
+  Avg_Pop%>%
+  arrange(Breed)
+
+Avg_Pop_Alpha        ### Need to remove "s" from end of breed names to join with the AvgLifespan table
+```
+
+```{r}
+Avg_Pop <- 
+  Avg_Pop%>%
+  mutate(Breed = gsub(pattern = "s$", replacement = "\\1", Breed))
+
+Avg_Pop
+```
+
+```{r}
+Avg_Life_Rank <-
+  Avg_Pop%>%
+  inner_join(AvgLifespan, by = c(Breed = "Breed"))%>%
+  select(Breed, AVG_Rank, AVG_Lifespan)
+
+Avg_Life_Rank
+```
 
 
+
+### Below I have combined the breed average rank with the most popular breeds by state to see what additional information we can gain on the popularity of longer versus shorter lived breeds.
+
+```{r}
+Pop_By_State <-
+  StateBreeds%>%
+  select(State, `1st Most Popular`)
+
+Pop_By_State
+
+State_Rank_Life <-
+  Pop_By_State%>%
+  inner_join(Avg_Life_Rank, by = c(`1st Most Popular` = "Breed"))
+
+State_Rank_Life
+
+State_Rank_Life%>%
+  arrange(desc(AVG_Lifespan))
+```
+
+### Now that we have the combined information on the most popular breed for each state as well as the average overall lifespan and popularity of these breeds we can see that the majority of the most popular breeds tend to have shorter lifespans. 
+```{r}
+ggplot(State_Rank_Life) +
+  aes(x = AVG_Rank, y = AVG_Lifespan) +
+  geom_point() +
+  theme_minimal() +
+  facet_wrap(vars(`1st Most Popular`))
+
+```
+  
+  
+  

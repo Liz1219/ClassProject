@@ -189,5 +189,33 @@ ggplot(State_Rank_Life) +
 
 ```
   
-  
-  
+```{r}
+Lifespan%>%
+  mutate(size = if (AVG_Weight <25){"small"}
+    else if (AVG_Weight == (25:50)){"medium"}
+    else if(AVG_Weight > 50){"large"})
+
+Lifespan%>%
+  summarise(mean(AVG_Lifespan, na.rm = TRUE))
+
+Size_Life <- Lifespan%>%
+  mutate(Size = if_else(AVG_Weight <30, "small", "large", missing = NULL))%>%
+  mutate(Lived = if_else(AVG_Lifespan <12, "short", "long", missing = NULL))
+
+Size_Life <- Size_Life%>%
+  select(Breed, Size, Lived)
+Size_Life
+```
+
+```{r}
+All_Info <- State_Rank_Life%>%
+  inner_join(Size_Life, by = c(`1st Most Popular` = "Breed"))
+
+All_Info
+```
+
+```{r}
+All_Info%>%
+  ggplot()
+```
+

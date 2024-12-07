@@ -82,6 +82,8 @@ StateBreeds
 
 ### Create some informative plots and summary statistics.
 
+Below we will calculate the average weight and average life expectancy from the minimums and maximum values recorded for each category.
+
 ```{r}
 Lifespan <- AKC_Data%>%
   select(Breed, min_expectancy, max_expectancy, min_weight, max_weight)%>%
@@ -92,9 +94,12 @@ Lifespan <- AKC_Data%>%
 Lifespan
 ```
 
-```{r}
+### In this graph we can see that the larger breeds tend to have shorter lifespans than the smaller breeds.
+
+```{r warning=FALSE}
 Lifespan%>%
   ggplot(aes(x=AVG_Weight, y=AVG_Lifespan))+
+  stat_smooth()+
   geom_point()+
   theme_bw()
 ```
@@ -169,9 +174,12 @@ Pop_By_State <-
 
 Pop_By_State
 
+Pop_By_State <- Pop_By_State%>%
+  mutate(`1st Most Popular` = gsub(pattern = "German Shepherd", replacement = "German Shepherd Dog", `1st Most Popular`)) ### adjusting breed name to join tables
+  
 State_Rank_Life <-
   Pop_By_State%>%
-  inner_join(Avg_Life_Rank, by = c(`1st Most Popular` = "Breed"))
+  inner_join(Avg_Life_Rank, by = c(`1st Most Popular` = "Breed")) ### 2 states removed from list due to no breed match
 
 State_Rank_Life
 
@@ -191,12 +199,7 @@ ggplot(State_Rank_Life) +
   
 ```{r}
 Lifespan%>%
-  mutate(size = if (AVG_Weight <25){"small"}
-    else if (AVG_Weight == (25:50)){"medium"}
-    else if(AVG_Weight > 50){"large"})
-
-Lifespan%>%
-  summarise(mean(AVG_Lifespan, na.rm = TRUE))
+  summarise(median(AVG_Lifespan, na.rm = TRUE))
 
 Size_Life <- Lifespan%>%
   mutate(Size = if_else(AVG_Weight <30, "small", "large", missing = NULL))%>%
@@ -209,13 +212,17 @@ Size_Life
 
 ```{r}
 All_Info <- State_Rank_Life%>%
-  inner_join(Size_Life, by = c(`1st Most Popular` = "Breed"))
+  inner_join(Size_Life, by = c(`1st Most Popular` = "Breed"))%>%
+  rename(Breed = `1st Most Popular`)
 
 All_Info
 ```
+### Finally, we can see below that only two breeds that are considered "long-lived" have a ranking in the top 10. They are the Beagle and the Yorkshire Terrier. The Labrador Retriever is overwhelmingly the most popular breed reported in our data, but we can also see high popularity for the German Shepherd Dog and the Golden Retriever. All 3 of these breeds would be considered large dogs with relatively short lifespans. Further questions we could consider pursuing with more data would be looking at other factors like whether the dogs are popular as house pets or working dogs. The prevelance of dogs used in jobs such as herding and guarding livestock, hunting, and work as service or assistance animals could skew popularity. If more information on the types of households these dogs inhabit was available we could dive further into defining the most popular pet breeds versus the most popular working breeds.
 
 ```{r}
-All_Info%>%
-  ggplot()
+ggplot(All_Info) +
+  aes(x = AVG_Rank, color = Breed, fill = Breed) +
+  geom_histogram(bins = 30L) +
+  theme_bw() +
+  facet_wrap(vars(Lived))
 ```
-

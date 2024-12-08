@@ -1,7 +1,7 @@
 ---
 title: "Class Project"
-author: "Mystery"
-date: "November 10, 2024"
+author: "Elizabeth Shaw"
+date: "December 8, 2024"
 output: html_notebook
 ---
 ### Guiding Question (i.e., Research Question):
@@ -217,6 +217,20 @@ All_Info <- State_Rank_Life%>%
 
 All_Info
 ```
+
+```{r}
+library(party)
+
+Lifespan <-
+  Lifespan%>%
+  select(Breed, AVG_Lifespan, AVG_Weight)
+
+Life_Diffs <-
+  dist(Lifespan)
+
+plot(Life_Diffs)
+```
+
 ### Finally, we can see below that only two breeds that are considered "long-lived" have a ranking in the top 10. They are the Beagle and the Yorkshire Terrier. The Labrador Retriever is overwhelmingly the most popular breed reported in our data, but we can also see high popularity for the German Shepherd Dog and the Golden Retriever. All 3 of these breeds would be considered large dogs with relatively short lifespans. Further questions we could consider pursuing with more data would be looking at other factors like whether the dogs are popular as house pets or working dogs. The prevelance of dogs used in jobs such as herding and guarding livestock, hunting, and work as service or assistance animals could skew popularity. If more information on the types of households these dogs inhabit was available we could dive further into defining the most popular pet breeds versus the most popular working breeds.
 
 ```{r}

@@ -174,12 +174,16 @@ Pop_By_State <-
 
 Pop_By_State
 
+### adjusting breed name to join tables
+
 Pop_By_State <- Pop_By_State%>%
-  mutate(`1st Most Popular` = gsub(pattern = "German Shepherd", replacement = "German Shepherd Dog", `1st Most Popular`)) ### adjusting breed name to join tables
+  mutate(`1st Most Popular` = gsub(pattern = "German Shepherd", replacement = "German Shepherd Dog", `1st Most Popular`)) 
   
 State_Rank_Life <-
   Pop_By_State%>%
-  inner_join(Avg_Life_Rank, by = c(`1st Most Popular` = "Breed")) ### 2 states removed from list due to no breed match
+  inner_join(Avg_Life_Rank, by = c(`1st Most Popular` = "Breed")) 
+
+### 2 states get removed from list due to no breed match
 
 State_Rank_Life
 
@@ -218,16 +222,21 @@ All_Info <- State_Rank_Life%>%
 All_Info
 ```
 
+### Below we can use the dist() function to calculate the differences between lifespans of each dog breed. The plot produced below illustrates that the majority of the lifespans are close together but there are still a significant number of outliers on each end.
+
 ```{r}
 library(party)
 
 Lifespan <-
   Lifespan%>%
-  select(Breed, AVG_Lifespan, AVG_Weight)
+  select(Breed, AVG_Lifespan)
 
 Life_Diffs <-
   dist(Lifespan)
 
+
+
+LD <- hclust(Life_Diffs, method = "complete")
 plot(Life_Diffs)
 ```
 

@@ -234,8 +234,6 @@ Lifespan <-
 Life_Diffs <-
   dist(Lifespan)
 
-
-
 LD <- hclust(Life_Diffs, method = "complete")
 plot(Life_Diffs)
 ```
